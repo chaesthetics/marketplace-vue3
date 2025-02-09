@@ -25,7 +25,6 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                
                     Forms\Components\Group::make([
                         Forms\Components\Section::make('Basic Information')->columns(1)->schema([
                             Forms\Components\TextInput::make('name')
