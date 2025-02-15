@@ -25,7 +25,6 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                
                     Forms\Components\Group::make([
                         Forms\Components\Section::make('Basic Information')->columns(1)->schema([
                             Forms\Components\TextInput::make('name')
@@ -57,14 +56,14 @@ class UserResource extends Resource
                             ]),
                         ]),
                     ])->columnSpan(['lg' => 2]),
-                    // Forms\Components\Group::make([
-                    //     Forms\Components\Section::make('Roles')->columns(1)->schema([
-                    //         Forms\Components\Select::make('roles')
-                    //             ->options(RolesEnum::class)
-                    //             ->relationship(titleAttribute: 'name')
-                    //             ->multiple(),
-                    //     ]),
-                    // ])->columnSpan(['lg' => 1]),
+                    Forms\Components\Group::make([
+                        Forms\Components\Section::make('Roles')->columns(1)->schema([
+                            Forms\Components\Select::make('roles')
+                                ->options(RolesEnum::class)
+                                ->relationship(titleAttribute: 'name')
+                                ->multiple(),
+                        ]),
+                    ])->columnSpan(['lg' => 1]),
                 ])->columns(['lg' => 3]);
     }
 

@@ -17,6 +17,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
 
 class PanelProvider extends BasePanelProvider
 {
@@ -24,9 +25,10 @@ class PanelProvider extends BasePanelProvider
     {
         return $panel
             ->default()
-            ->id('1')
-            ->path('1')
+            ->id('admin')
+            ->path('admin')
             ->login()
+            // ->loginRouteSlug('login')
             ->colors([
                 'primary' => Color::Green,
             ])
@@ -53,6 +55,9 @@ class PanelProvider extends BasePanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->plugins([
+                FilamentSpatieRolesPermissionsPlugin::make(),
             ]);
     }
 }
