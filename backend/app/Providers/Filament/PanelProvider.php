@@ -28,6 +28,7 @@ class PanelProvider extends BasePanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            // ->loginRouteSlug('login')
             ->colors([
                 'primary' => Color::Green,
             ])
