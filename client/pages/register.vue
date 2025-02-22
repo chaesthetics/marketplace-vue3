@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types'
 import * as Yup from 'yup'
+import { register } from '#imports'
 
 interface State {
     name: string | undefined;
@@ -27,6 +28,7 @@ const handleSubmit = async(
 ) => {
     const { name, email, password } = event.data;
     console.log(name);
+    register(1);
 }
 
 </script>
