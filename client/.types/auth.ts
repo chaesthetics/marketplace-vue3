@@ -22,11 +22,21 @@ export type LoginCredentials = {
   password: string;
 };
 
+export type RegisterCredentials = {
+  name: string;
+  email: string;
+  password: string;
+}
+
 export type LoginResponse = {
   token: string;
   user: UserProfile;
   permissions: string[];
 };
+
+export type RegisterResponse = {
+  message: string;
+}
 
 export type CurrentUserResponse = {
   user: UserProfile;

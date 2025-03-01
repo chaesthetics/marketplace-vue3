@@ -20,5 +20,8 @@
     "vue": "latest",
     "vue-router": "latest",
     "yup": "^1.6.1"
+  },
+  "devDependencies": {
+    "@pinia-plugin-persistedstate/nuxt": "^1.2.0"
   }
 }
