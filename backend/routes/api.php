@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\auth\RegisterController;
-
+use App\Http\Controllers\api\auth\LoginController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,4 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('/register', RegisterController::class);
+    Route::post('/login', LoginController::class);
 });

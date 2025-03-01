@@ -10,8 +10,6 @@ class RegisterController extends Controller
 {
     public function __invoke(RegisterRequest $request, RegisterAction $registerAction)
     {
-        \Log::info('RegisterController is being hit!');
-
         $register = $registerAction->handle($request->validated());
 
         if (!empty($register)) {
