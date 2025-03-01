@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types'
 import * as Yup from 'yup'
-import { register } from '#imports'
+import { useAuthStore } from '#imports';
+import { ResponseError } from "~/errors/response-error";
+import { handleError } from "~/helpers/helpers";
 
 interface State {
     name: string | undefined;
@@ -9,13 +11,17 @@ interface State {
     password: string | undefined;
 }
 
-const form = ref()
+const form = ref();
+const loading = ref(false);
+const auth = useAuthStore();
 
 const state = reactive<State>({
     name: undefined,
     email: undefined,
     password: undefined,
 });
+
+const { displayToast } = getToastMessage();
 
 const schema = Yup.object({
     name: Yup.string().min(3, "Please enter your fullname").required("This field is required"),
@@ -27,10 +33,26 @@ const handleSubmit = async(
     event: FormSubmitEvent<{ name: string; email: string; password: string }>,
 ) => {
     const { name, email, password } = event.data;
-    console.log(name);
-    register(1);
-}
+    loading.value = true;
+    try{
+        await auth.register({name, email, password});
 
+    } catch(error){
+        if (error instanceof ResponseError) {
+            if (
+            error.message.startsWith("The email has already been taken.") 
+            ){
+                loading.value = false;
+                return displayToast(error.message, "red");
+            }
+            handleError(error.message, error.status);
+        }else{
+            return showLoginFormErrors(error as Error, form);
+        }
+        handleError(error.message, error.status);
+        loading.value = false;
+    }
+}
 </script>
 <template>
 <main class="flex min-h-screen justify-center items-center">
@@ -67,7 +89,11 @@ const handleSubmit = async(
                 />
             </UFormGroup>
 
-            <UButton type="submit" class="w-full flex justify-center text-center">
+            <UButton 
+                type="submit" 
+                class="w-full flex justify-center text-center"
+                :loading="loading"
+            >
                 Submit
             </UButton>
         </UForm>

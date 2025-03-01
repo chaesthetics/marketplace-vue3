@@ -2,7 +2,9 @@ import { defineStore, createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import type { 
     UserProfile,
+    RegisterCredentials,
     LoginCredentials,
+    RegisterResponse,
     LoginResponse,
     CurrentUserResponse,
  } from "../.types/auth";
@@ -53,6 +55,22 @@ export const useAuthStore = defineStore("auth",{
             }
           } catch (error) {
             if (error instanceof ResponseError) {
+              throw new ResponseError(error.message, error.status);
+            } else {
+              throw new Error(error?.toString());
+            }
+          }
+        },
+
+        async register(credentials: RegisterCredentials) {
+          try{
+            const { postData } = useApi();
+            const response = await postData<RegisterResponse | ErrorResponse>(
+              `/api/auth/register`,
+              credentials,
+            );
+          } catch(error){
+            if (error instanceof ResponseError){
               throw new ResponseError(error.message, error.status);
             } else {
               throw new Error(error?.toString());
