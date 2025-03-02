@@ -36,7 +36,13 @@ const handleSubmit = async(
     loading.value = true;
     try{
         await auth.register({name, email, password});
+        loading.value = false;
+        displayToast("Registration successful", "green");
 
+        // const redirectURL = auth.attemptedURL || "/login";
+        // auth.storeAttemptedURL("");
+        // navigateTo(redirectURL);
+        Object.assign(state, { name: "", email: "", password: "" });
     } catch(error){
         if (error instanceof ResponseError) {
             if (
