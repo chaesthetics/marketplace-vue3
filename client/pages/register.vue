@@ -4,6 +4,7 @@ import * as Yup from 'yup'
 import { useAuthStore } from '#imports';
 import { ResponseError } from "~/errors/response-error";
 import { handleError } from "~/helpers/helpers";
+import Vanta from "~/components/Vanta.vue";
 
 interface State {
     name: string | undefined;
@@ -38,10 +39,6 @@ const handleSubmit = async(
         await auth.register({name, email, password});
         loading.value = false;
         displayToast("Registration successful", "green");
-
-        // const redirectURL = auth.attemptedURL || "/login";
-        // auth.storeAttemptedURL("");
-        // navigateTo(redirectURL);
         Object.assign(state, { name: "", email: "", password: "" });
     } catch(error){
         if (error instanceof ResponseError) {
@@ -62,14 +59,17 @@ const handleSubmit = async(
 </script>
 <template>
 <main class="flex min-h-screen justify-center items-center">
+    <ClientOnly>
+        <Vanta />
+    </ClientOnly>
     <div
       class="flex flex-col space-y-6 items-center w-full max-w-sm px-6 py-12 mx-auto bg-white shadow-sm sm:max-w-md h-3/4 ring-1 ring-neutral-300 sm:rounded-xl sm:px-12 lg:px-6"
     >
         <img
           src="../assets/logo1.png"
-          class="w-[12rem] object-cover mx-auto rounded-md"
+          class="w-[10rem] object-cover mx-auto rounded-md"
         />
-        <span class="text-lg">Register Now</span>
+        <span class="text-md">Create your account</span>
         <UForm class="w-full space-y-2"
             :state="state"
             :schema="schema"
@@ -79,12 +79,14 @@ const handleSubmit = async(
             <UFormGroup label="Name" name="name">
                 <UInput 
                     v-model="state.name"
+                    autocomplete="off"
                 />
             </UFormGroup>
 
             <UFormGroup label="Email" name="email">
                 <UInput 
                     v-model="state.email"
+                    autocomplete="off"
                 />
             </UFormGroup>
 
@@ -106,3 +108,6 @@ const handleSubmit = async(
   </div>
 </main>
 </template>
+
+<style scoped>
+</style>

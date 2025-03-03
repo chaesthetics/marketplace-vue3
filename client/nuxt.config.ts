@@ -5,6 +5,10 @@ export default defineNuxtConfig({
     '@pinia-plugin-persistedstate/nuxt'
   ],
 
+  plugins: [
+    '~/plugins/vanta.js', 
+  ],
+
   runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_MARKETPLACE_API_BASE,
