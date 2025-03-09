@@ -6,10 +6,12 @@ definePageMeta({
   permissions: [{ action: "view", subject: "Post" }],
 });
 
+import CsvUpload from '~/components/CsvUpload.vue';
+
 </script>
 
 <template>
     <div class="flex h-full w-full justify-center">
-        <p>Coming soon.</p>
+        <CsvUpload />
     </div>
 </template>
