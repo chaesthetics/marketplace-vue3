@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\auth\RegisterController;
 use App\Http\Controllers\api\auth\LoginController;
+use App\Http\Controllers\UserImportController;
+use Illuminate\Support\Facades\Redis;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,3 +25,5 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/register', RegisterController::class);
     Route::post('/login', LoginController::class);
 });
+
+Route::post('/import-users', [UserImportController::class, 'import']);
