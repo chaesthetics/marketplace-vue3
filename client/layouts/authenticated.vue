@@ -14,10 +14,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="bg-[#fafafa] h-screen flex gap-x-2 overflow-hidden w-full p-2">
-    <div class="h-full flex-shrink-0 max-w-[250px]">
-      <SideNav />
+  <div class="bg-white h-screen flex overflow-hidden w-full">
+    <!-- Sidebar Wrapper (Fixed Width) -->
+    <div class="h-full flex-shrink-0 w-auto flex">
+      <SideNav class="w-full h-full" />
     </div>
+
+    <!-- Main Content -->
     <div class="flex flex-col flex-grow gap-2">
       <Navbar />
       <div class="h-[calc(100vh-80px)]">
