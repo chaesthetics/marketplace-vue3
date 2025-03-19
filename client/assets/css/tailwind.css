@@ -3,3 +3,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes smoothZoomIn {
+    0% { transform: scale(0.50); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  
+  @keyframes smoothZoomOut {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0.50); opacity: 0; }
+  }
+  
+  /* Register animation in Tippy */
+  .tippy-box[data-animation='smooth-zoom'] {
+    animation: smoothZoomIn 0.3s ease-out forwards;
+  }
+  
+  .tippy-box[data-animation='smooth-zoom'][data-state='hidden'] {
+    animation: smoothZoomOut 0.2s ease-in forwards;
+  }
+
+  .tippy-box {
+    box-shadow: 4px 4px 15px rgba(133, 224, 133, 0.15);
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-radius: 10%;
+    font-size: 1rem !important;
+  }

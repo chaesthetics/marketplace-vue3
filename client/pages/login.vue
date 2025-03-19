@@ -63,11 +63,11 @@ const handleSubmit = async(
           class="flex flex-col space-y-6 items-center w-full max-w-sm px-6 py-12 mx-auto bg-white shadow-sm sm:max-w-md h-3/4 ring-1 ring-neutral-300 sm:rounded-xl sm:px-12 lg:px-6"
         >
             <img
-              src="../assets/logo1.png"
+              src="../assets/qmart.png"
               class="w-[12rem] object-cover mx-auto rounded-md"
             />
             <span class="text-lg">Register Now</span>
-            <UForm class="w-full space-y-2"
+            <UForm class="w-full space-y-6"
                 :state="state"
                 :schema="schema"
                 ref="form"
