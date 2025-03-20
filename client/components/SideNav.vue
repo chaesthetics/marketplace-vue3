@@ -3,12 +3,20 @@ import { ref, onMounted, nextTick, watch } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
 import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
+import { useRoute } from 'vue-router';
 
 // const isCollapsed = useLocalStorage('sidebar-collapsed', false);
 const isCollapsed = ref(false);
+const route = useRoute();
+const activeItem = ref(route.path);
 
 const toggleSidebar = () => {
   isCollapsed.value = !isCollapsed.value;
+};
+
+const setActive = (link) => {
+  activeItem.value = link;
+  console.log(activeItem.value);
 };
 
 const menuItems = ref([
@@ -31,7 +39,7 @@ const initializeTippy = () => {
         animateFill: true,
         duration: [0, 300],
         animation: 'smooth-zoom',
-        offset: [0, 35],
+        offset: [0, 16],
         onShow(instance) {
           if (isCollapsed.value) {
             instance.hide();
@@ -61,10 +69,10 @@ const bottomMenuItems = [
     <!-- Sidebar -->
     <aside :class="[
       'bg-[#F8F8F8] text-black transition-all duration-500 ease-in-out flex flex-col overflow-hidden py-6 shadow-sm',
-      isCollapsed ? 'w-16 items-center' : 'w-56 px-3'
+      isCollapsed ? 'w-16 items-center' : 'w-56'
     ]" class="flex flex-col justify-between">
 
-      <div class="flex items-center justify-between">
+      <div :class="`flex items-center justify-between ${isCollapsed ? '' : 'px-3'}`">
         <img src="../assets/qmart.png" :class="`w-[7rem] ${isCollapsed ? 'hidden' : 'block'}`" />
 
         <button @click="toggleSidebar" class="p-2 rounded transition-all duration-500 ease-in-out">
@@ -77,25 +85,31 @@ const bottomMenuItems = [
         </button>
       </div>
 
-      <button :class="`flex items-center gap-2 border border-black px-8 py-1 rounded-full transition my-4 justify-center items-center
-      ${isCollapsed ? 'border-none bg-none' : ' bg-white'} `">
-          <svg class="w-4 h-4" fill="black" stroke="black" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <div :class="`flex items-center gap-2 border border-black py-1 mx-auto w-full max-w-[200px] rounded-full transition my-4 justify-center items-center
+      ${isCollapsed ? 'border-none bg-gray-200 rounded-full max-w-[35px]' : ' bg-white'} `">
+          <svg class="w-6 h-6" fill="black" stroke="black" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
           </svg>
           <span :class="`font-medium ${isCollapsed ? 'hidden' : 'block'}`">New search</span>
-        </button>
+      </div>
 
-      <nav class="flex flex-col gap-2 flex-1 w-full items-center">
+        <nav class="flex flex-col flex-1 w-full items-center">
         
         <NuxtLink v-for="item in menuItems" :key="item.text" :to="item.link"
-          class="nav-item flex items-center gap-2 p-2 rounded transition-all duration-500 ease-in-out"
-          :class="isCollapsed ? 'justify-center w-fit px-0' : 'justify-start w-full'" 
+          class="relative nav-item flex items-center gap-2 p-2 transition-all duration-500 ease-in-out
+          w-full text-black"
+          :class="`${isCollapsed ? 'justify-center py-[16px] ' : 'justify-start pl-6 py-[10px] '}`" 
           :data-tippy-content="item.tooltip"
+          @click="setActive(item.link)"
           >
+          <div 
+            v-if="activeItem === item.link"
+            class="absolute right-0 h-10 w-1 bg-green-600 rounded-full">
+          </div>
           <div v-if="item.icon.startsWith('<svg')" v-html="item.icon" class="w-5 h-5"></div>
           <Icon v-else :name="item.icon" class="w-5 h-5 transition-all duration-500 ease-in-out text-gray-700" />
           <span class="transition-all text-gray-600 font-semibold duration-500 ease-in-out overflow-hidden whitespace-nowrap"
-            :class="{ 'hidden': isCollapsed, 'block': !isCollapsed }">
+            :class="`${isCollapsed ? 'hidden' : 'block'} ${activeItem === item.link ? 'text-neutral-900' : ''}`">
             {{ item.text }}
           </span>
         </NuxtLink>
@@ -103,8 +117,8 @@ const bottomMenuItems = [
 
       <nav class="flex flex-col gap-2 w-full mt-auto items-center">
         <NuxtLink v-for="item in bottomMenuItems" :key="item.text" :to="item.link"
-          class="flex items-center gap-2 p-2 rounded transition-all duration-500 ease-in-out"
-          :class="isCollapsed ? 'justify-center w-fit px-0' : 'justify-start w-full'">
+          class="flex items-center gap-2 p-2 rounded transition-all duration-500 ease-in-out w-full"
+          :class="`${isCollapsed ? 'justify-center py-[16px] ' : 'justify-start pl-6 py-[10px]'}`">
           <div v-if="item.icon.startsWith('<svg')" v-html="item.icon" class="w-5 h-5"></div>
           <Icon v-else :name="item.icon" class="w-5 h-5 transition-all duration-500 ease-in-out text-gray-700" />
           <span class="transition-all text-gray-600 font-semibold duration-500 ease-in-out overflow-hidden whitespace-nowrap"

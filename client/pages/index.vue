@@ -3,7 +3,7 @@
 definePageMeta({
   middleware: ["auth"],
   layout: "authenticated",
-  permissions: [{ action: "view", subject: "Post" }],
+  permissions: [{ action: "viewAny", subject: "Post" }],
 });
 
 </script>
