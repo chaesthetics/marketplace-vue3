@@ -64,7 +64,7 @@ const bottomMenuItems = [
 </script>
 
 <template>
-  <div class="flex h-screen">
+  <div class="flex h-screen z-30">
     <img src="../assets/qmart.png" :class="`absolute top-[20px] left-[80px] w-[7rem] ${isCollapsed ? 'block' : 'hidden'}`" />
     <!-- Sidebar -->
     <aside :class="[
@@ -97,7 +97,7 @@ const bottomMenuItems = [
         
         <NuxtLink v-for="item in menuItems" :key="item.text" :to="item.link"
           class="relative nav-item flex items-center gap-2 p-2 transition-all duration-500 ease-in-out
-          w-full text-black"
+          w-full text-[16px] "
           :class="`${isCollapsed ? 'justify-center py-[16px] ' : 'justify-start pl-6 py-[10px] '}`" 
           :data-tippy-content="item.tooltip"
           @click="setActive(item.link)"
@@ -109,9 +109,12 @@ const bottomMenuItems = [
           <div v-if="item.icon.startsWith('<svg')" v-html="item.icon" class="w-5 h-5"></div>
           <Icon v-else :name="item.icon" class="w-5 h-5 transition-all duration-500 ease-in-out text-gray-700" />
           <span class="transition-all text-gray-600 font-semibold duration-500 ease-in-out overflow-hidden whitespace-nowrap"
-            :class="`${isCollapsed ? 'hidden' : 'block'} ${activeItem === item.link ? 'text-neutral-900' : ''}`">
+            :class="`${isCollapsed ? 'hidden' : 'block'} ${activeItem === item.link ? 'text-neutral-900' : ''}`"
+          >
+
             {{ item.text }}
           </span>
+
         </NuxtLink>
       </nav>
 
