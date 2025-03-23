@@ -3,11 +3,14 @@ import { ref, onMounted, nextTick, watch } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
 import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter  } from 'vue-router';
+import { useAuthStore } from '#imports';
 
 // const isCollapsed = useLocalStorage('sidebar-collapsed', false);
+const { user, logout } = useAuthStore();
 const isCollapsed = ref(false);
 const route = useRoute();
+const router = useRouter();
 const activeItem = ref(route.path);
 
 const toggleSidebar = () => {
@@ -17,6 +20,31 @@ const toggleSidebar = () => {
 const setActive = (link) => {
   activeItem.value = link;
   console.log(activeItem.value);
+};
+
+const logoutItems = ref([
+  { label: 'Profile', icon: 'i-lucide-user', action: () => router.push('/profile') },
+  { label: 'Settings', icon: 'i-lucide-cog', action: () => router.push('/settings') },
+  { label: 'Logout', icon: 'i-lucide-log-out', action: () =>  logout() },
+]);
+
+const isLogoutDropdownOpen = ref(false);
+
+const toggleLogoutDropdown = (event) => {
+  isLogoutDropdownOpen.value = !isLogoutDropdownOpen.value;
+  event.stopPropagation();
+};
+
+const handleLogoutItemClick = (item) => {
+  if (typeof item.action === 'function') {
+    item.action();
+  }
+
+  isLogoutDropdownOpen.value = false;
+};
+
+const closeDropdown = () => {
+  isLogoutDropdownOpen.value = false;
 };
 
 const menuItems = ref([
@@ -51,21 +79,24 @@ const initializeTippy = () => {
 };
 
 
-onMounted(initializeTippy);
+onMounted(()=>{
+  initializeTippy();
+  document.addEventListener('click', closeDropdown);
+});
 watch(menuItems, initializeTippy, { deep: true });
-watch(isCollapsed, ()=> {
+watch(isCollapsed, () => {
   initializeTippy();
 });
 
 const bottomMenuItems = [
-  { text: 'Settings', link: '/settings', icon: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="27" fill="black" data-spm-anchor-id=""><path d="M9 5.25H15V6.625H9V5.25Z" fill="#222222"></path><path d="M12 18.75C12.5523 18.75 13 18.3023 13 17.75C13 17.1977 12.5523 16.75 12 16.75C11.4477 16.75 11 17.1977 11 17.75C11 18.3023 11.4477 18.75 12 18.75Z" fill="#222222"></path><path d="M5.75 2.5C5.33579 2.5 5 2.83579 5 3.25V20.75C5 21.1642 5.33579 21.5 5.75 21.5H18.25C18.6642 21.5 19 21.1642 19 20.75V3.25C19 2.83579 18.6642 2.5 18.25 2.5H5.75ZM6.375 3.875H17.625V20.125H6.375V3.875Z" fill="#222222"></path></svg>' },
-  { text: 'Profile', icon: 'heroicons-outline:user', link: '/profile' },
+  { text: 'Connect', link: '/connect', icon: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black" data-spm-anchor-id=""><path d="M9 5.25H15V6.625H9V5.25Z" fill="#222222"></path><path d="M12 18.75C12.5523 18.75 13 18.3023 13 17.75C13 17.1977 12.5523 16.75 12 16.75C11.4477 16.75 11 17.1977 11 17.75C11 18.3023 11.4477 18.75 12 18.75Z" fill="#222222"></path><path d="M5.75 2.5C5.33579 2.5 5 2.83579 5 3.25V20.75C5 21.1642 5.33579 21.5 5.75 21.5H18.25C18.6642 21.5 19 21.1642 19 20.75V3.25C19 2.83579 18.6642 2.5 18.25 2.5H5.75ZM6.375 3.875H17.625V20.125H6.375V3.875Z" fill="#222222"></path></svg>' },
 ];
 </script>
 
 <template>
   <div class="flex h-screen z-30">
-    <img src="../assets/qmart.png" :class="`absolute top-[20px] left-[80px] w-[7rem] ${isCollapsed ? 'block' : 'hidden'}`" />
+    <img src="../assets/qmart.png"
+      :class="`absolute top-[20px] left-[80px] w-[7rem] ${isCollapsed ? 'block' : 'hidden'}`" />
     <!-- Sidebar -->
     <aside :class="[
       'bg-[#F8F8F8] text-black transition-all duration-500 ease-in-out flex flex-col overflow-hidden py-6 shadow-sm',
@@ -87,30 +118,26 @@ const bottomMenuItems = [
 
       <div :class="`flex items-center gap-2 border border-black py-1 mx-auto w-full max-w-[200px] rounded-full transition my-4 justify-center items-center
       ${isCollapsed ? 'border-none bg-gray-200 rounded-full max-w-[35px]' : ' bg-white'} `">
-          <svg class="w-6 h-6" fill="black" stroke="black" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
-          </svg>
-          <span :class="`font-medium ${isCollapsed ? 'hidden' : 'block'}`">New search</span>
+        <svg class="w-6 h-6" fill="black" stroke="black" stroke-width="2" viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+        </svg>
+        <span :class="`font-medium ${isCollapsed ? 'hidden' : 'block'}`">New search</span>
       </div>
 
-        <nav class="flex flex-col flex-1 w-full items-center">
-        
-        <NuxtLink v-for="item in menuItems" :key="item.text" :to="item.link"
-          class="relative nav-item flex items-center gap-2 p-2 transition-all duration-500 ease-in-out
+      <nav class="flex flex-col flex-1 w-full items-center">
+
+        <NuxtLink v-for="item in menuItems" :key="item.text" :to="item.link" class="relative nav-item flex items-center gap-2 p-2 transition-all duration-500 ease-in-out
           w-full text-[16px] "
-          :class="`${isCollapsed ? 'justify-center py-[16px] ' : 'justify-start pl-6 py-[10px] '}`" 
-          :data-tippy-content="item.tooltip"
-          @click="setActive(item.link)"
-          >
-          <div 
-            v-if="activeItem === item.link"
-            class="absolute right-0 h-10 w-1 bg-green-600 rounded-full">
+          :class="`${isCollapsed ? 'justify-center py-[16px] ' : 'justify-start pl-6 py-[10px] '}`"
+          :data-tippy-content="item.tooltip" @click="setActive(item.link)">
+          <div v-if="activeItem === item.link" class="absolute right-0 h-10 w-1 bg-green-600 rounded-full">
           </div>
           <div v-if="item.icon.startsWith('<svg')" v-html="item.icon" class="w-5 h-5"></div>
           <Icon v-else :name="item.icon" class="w-5 h-5 transition-all duration-500 ease-in-out text-gray-700" />
-          <span class="transition-all text-gray-600 font-semibold duration-500 ease-in-out overflow-hidden whitespace-nowrap"
-            :class="`${isCollapsed ? 'hidden' : 'block'} ${activeItem === item.link ? 'text-neutral-900' : ''}`"
-          >
+          <span
+            class="transition-all text-gray-600 font-semibold duration-500 ease-in-out overflow-hidden whitespace-nowrap"
+            :class="`${isCollapsed ? 'hidden' : 'block'} ${activeItem === item.link ? 'text-neutral-900' : ''}`">
 
             {{ item.text }}
           </span>
@@ -124,11 +151,35 @@ const bottomMenuItems = [
           :class="`${isCollapsed ? 'justify-center py-[16px] ' : 'justify-start pl-6 py-[10px]'}`">
           <div v-if="item.icon.startsWith('<svg')" v-html="item.icon" class="w-5 h-5"></div>
           <Icon v-else :name="item.icon" class="w-5 h-5 transition-all duration-500 ease-in-out text-gray-700" />
-          <span class="transition-all text-gray-600 font-semibold duration-500 ease-in-out overflow-hidden whitespace-nowrap"
+          <span
+            class="transition-all text-gray-600 font-semibold duration-500 ease-in-out overflow-hidden whitespace-nowrap"
             :class="{ 'hidden': isCollapsed, 'block': !isCollapsed }">
             {{ item.text }}
           </span>
         </NuxtLink>
+
+        <div @click="toggleLogoutDropdown"
+          class="flex items-center gap-2 p-2 rounded transition-all duration-500 ease-in-out w-full hover:cursor-pointer"
+          :class="`${isCollapsed ? 'justify-center py-[16px] ' : 'justify-start pl-6 py-[10px]'}`">
+          <Icon name="heroicons-outline:user" class="w-5 h-5 text-gray-700 transition-all duration-500 ease-in-out" />
+          <span
+            class="transition-all text-black text-sm font-semibold duration-500 ease-in-out overflow-hidden whitespace-nowrap text-ellipsis"
+            :class="{ 'hidden': isCollapsed, 'block': !isCollapsed }">
+            {{ user?.name }}
+          </span>
+        </div>
+
+        <div v-if="isLogoutDropdownOpen"
+          class="absolute left-4 bottom-20 mt-2 w-48 bg-white border rounded-xl shadow-xl z-50
+        ">
+          <ul class="py-2 px-2">
+            <li v-for="item in logoutItems" :key="item.label" @click="handleLogoutItemClick(item)"
+              class="transition-all duration-200 px-4 py-2 hover:bg-gray-200 flex items-center cursor-pointer gap-2 font-semibold rounded">
+              <Icon :name="item.icon" class="w-5 h-5 text-neutral-800" />
+              <span :class="item.class || 'text-gray-800 text-sm'">{{ item.label }}</span>
+            </li>
+          </ul>
+        </div>
 
       </nav>
     </aside>
@@ -136,7 +187,21 @@ const bottomMenuItems = [
 </template>
 
 <style scope>
+
 .icon-class {
   stroke-width: 0.1;
 }
+
+.arrow-down {
+  position: absolute;
+  top: -6px;
+  left: 16px; /* Adjust to point directly to Profile */
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid white; /* Match dropdown background */
+}
+
+
 </style>
