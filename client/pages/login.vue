@@ -10,6 +10,11 @@ interface State {
     password: string | undefined;
 }
 
+definePageMeta({
+    middleware: ["guest"],
+    layout: "default",
+});
+
 const form = ref();
 const loading = ref(false);
 const auth = useAuthStore();
@@ -64,10 +69,10 @@ const handleSubmit = async(
         >
             <img
               src="../assets/qmart.png"
-              class="w-[12rem] object-cover mx-auto rounded-md"
+              class="w-[10rem] object-cover mx-auto rounded-md"
             />
-            <span class="text-lg">Register Now</span>
-            <UForm class="w-full space-y-6"
+            <span class="text-lg font-semibold">Sign in</span>
+            <UForm class="w-full space-y-8"
                 :state="state"
                 :schema="schema"
                 ref="form"
