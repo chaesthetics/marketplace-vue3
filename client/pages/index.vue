@@ -9,8 +9,8 @@ definePageMeta({
 </script>
 
 <template>
-    <div class="flex h-full min-w-[840px] w-full justify-center max-w-full">
-      <div class="w-full h-[98%] flex justify-center items-center flex-col px-12 gap-6">
+    <div class="flex h-full min-w-[840px] w-full max-w-full flex-col">
+      <div class="w-full h-[60vh] flex min-h-[60vh] justify-center items-center flex-col px-12 my-16 gap-6">
         <p class="font-['Inter', 'Noto Sans', 'Roboto', 'SF Pro'] text-[28px] font-bold text-neutral-800">Find products for your marketplace with AI!</p>
         <div class="relative flex items-center gap-4 p-1 bg-gray-100 rounded-lg">
           <div class="flex items-center gap-2 bg-white rounded-md px-6 py-2">
@@ -56,5 +56,6 @@ definePageMeta({
           </div>
         </div>
       </div>
+      <ProductsCard />
     </div>
 </template>
