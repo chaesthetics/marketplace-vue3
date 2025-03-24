@@ -14,16 +14,16 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="bg-white h-screen flex overflow-hidden w-full">
+  <div class="bg-white h-screen min-h-screen flex overflow-hidden w-full">
     <div class="h-full flex-shrink-0 w-auto flex">
       <SideNav class="w-full h-full" />
     </div>
 
     <!-- Main Content -->
-    <div class="flex flex-col gap-2 overflow-x-scroll flex-grow overflow-x-scroll
+    <div class="flex flex-col overflow-x-auto h-full w-full
     ">
       <Navbar />
-      <div class="h-[calc(100vh-80px)]">
+      <div class="flex flex-1 h-full w-full">
         <slot />
       </div>
     </div>
