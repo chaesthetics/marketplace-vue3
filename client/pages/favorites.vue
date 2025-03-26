@@ -7,4 +7,8 @@ definePageMeta({
 });
 
 </script>
-<template></template>
+<template>
+  <div class="w-full h-full flex items-center justify-center">
+    <p>Coming soon.</p>
+  </div>
+</template>
