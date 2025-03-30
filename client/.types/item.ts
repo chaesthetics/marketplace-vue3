@@ -1,4 +1,4 @@
 export interface UploadItems {
     title: string | null;
-    image: File;
+    file: File | null;
 }
