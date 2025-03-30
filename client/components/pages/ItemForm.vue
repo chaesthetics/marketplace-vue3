@@ -1,36 +1,78 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
+import type { UploadItems } from '../../.types/item';
+import type { FormSubmitEvent } from '#ui/types'
+import * as Yup from 'yup'
+import { ResponseError } from "~/errors/response-error";
 
-const file = ref<File | null>(null);
-const title = ref('');
+const form = ref();
+const loading = ref(false);
+const auth = useAuthStore();
+
+const state = reactive<UploadItems>({
+    title: '',
+    file: null,
+});
+
+const hasErrors = ref(false);
+
+const schema = Yup.object({
+    title: Yup.string().required('Product name is required'),
+    file: Yup.mixed().required('Product image is required'),
+});
+
 const previewUrl = ref<string | null>(null);
 
 const handleFileUpload = (event: Event) => {
   const input = event.target as HTMLInputElement;
   if (input.files && input.files[0]) {
-    file.value = input.files[0];
-    previewUrl.value = URL.createObjectURL(file.value);
+    state.file = input.files[0];
+    previewUrl.value = URL.createObjectURL(input.files[0]);
   }
 };
 
-const handleTitleChange = (event: Event) => {
-  const { value } = event.target as HTMLTextAreaElement;
-  title.value = value;
+const { displayToast } = getToastMessage();
+
+const handleSubmitItem = (
+    event: FormSubmitEvent<{ title: string; file: File}>
+) => {
+    hasErrors.value = false;
+    const { title, file } = event.data;
+    loading.value = true;
+
+    try{
+        console.log("Data", { "file": file, "title": title});
+        loading.value = false;
+    } catch(error){
+        if (error instanceof ResponseError) {
+            if (error.message){
+                hasErrors.value = true;
+                loading.value = false;
+                return displayToast(error.message, "red");
+            }
+        displayToast(error.message, "red");
+        loading.value = false;
+    }
 }
 
-const handleSubmitItem = () => {
-  console.log("FileValue: ", file.value);
-  console.log("Title: ", title.value);
 }
 </script>
 
 <template>
-    <div class="flex min-w-[676px] w-[800px] border rounded-xl px-6 py-4 shadow-[0_5px_20px_rgba(16,185,129,0.2)]">
+    <UForm 
+
+        :class="`flex min-w-[676px] w-[800px] border rounded-xl px-6 py-4 ${hasErrors ? 'shadow-[0_5px_30px_rgba(239,68,68,0.5)]' 
+        : 'shadow-[0_5px_20px_rgba(16,185,129,0.2)]'}`"
+        :state="state"
+        :schema="schema"
+        ref="form"
+        @submit.prevent="handleSubmitItem"
+    >
           <div class="flex justify-between w-full">
             <div class="w-full flex-col">
               <textarea class="w-full outline-none resize-none placeholder-neutral-600 text-[17px] p-2 max-h-40 overflow-auto" 
               placeholder="Enter product name"
-              @input="handleTitleChange"
+              v-model="state.title"
               ></textarea>
               <div v-if="previewUrl" class="flex h-[120px] w-[120px] pb-4">
                 <img 
@@ -56,9 +98,9 @@ const handleSubmitItem = () => {
             </div>
             <div class="flex h-full flex-col justify-end w-[120px]">
               <button class="bg-green-600 text-white px-4 py-2 rounded-full flex gap-1 items-center w-full flex justify-center">
-                <span @click="handleSubmitItem" class="font-semibold">Upload</span>  
+                <span type="submit" class="font-semibold">Upload</span>  
               </button>
             </div>
           </div>
-        </div>
+        </UForm>
 </template>
