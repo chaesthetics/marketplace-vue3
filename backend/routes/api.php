@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\auth\RegisterController;
 use App\Http\Controllers\api\auth\LoginController;
 use App\Http\Controllers\Api\ItemController; 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes

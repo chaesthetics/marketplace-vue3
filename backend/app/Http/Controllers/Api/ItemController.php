@@ -20,7 +20,10 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        \Log::info([
+            "title" => $request->title,
+            "file" => $request->file,
+        ]);
     }
 
     /**
