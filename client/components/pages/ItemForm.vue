@@ -4,7 +4,9 @@ import type { UploadItems } from '../../.types/item';
 import type { FormSubmitEvent } from '#ui/types'
 import * as Yup from 'yup'
 import { ResponseError } from "~/errors/response-error";
+import { useApi } from "~/helpers/api";
 
+const { postData } = useApi();
 const form = ref();
 const loading = ref(false);
 const auth = useAuthStore();
@@ -33,15 +35,13 @@ const handleFileUpload = (event: Event) => {
 
 const { displayToast } = getToastMessage();
 
-const handleSubmitItem = (
+const handleSubmitItem = async(
     event: FormSubmitEvent<{ title: string; file: File}>
 ) => {
     hasErrors.value = false;
-    const { title, file } = event.data;
     loading.value = true;
-
     try{
-        console.log("Data", { "file": file, "title": title});
+        await postData('/api/items', event.data);
         loading.value = false;
     } catch(error){
         if (error instanceof ResponseError) {
