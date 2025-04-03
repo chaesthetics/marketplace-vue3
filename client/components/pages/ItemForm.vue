@@ -6,7 +6,7 @@ import * as Yup from 'yup'
 import { ResponseError } from "~/errors/response-error";
 import { useApi } from "~/helpers/api";
 
-const { postData } = useApi();
+const { $api } = useNuxtApp();
 const form = ref();
 const loading = ref(false);
 const auth = useAuthStore();
@@ -41,7 +41,12 @@ const handleSubmitItem = async(
     hasErrors.value = false;
     loading.value = true;
     try{
-        await postData('/api/items', event.data);
+        console.log(event.data);
+        await $api.post('/api/items', event.data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
         loading.value = false;
     } catch(error){
         if (error instanceof ResponseError) {
