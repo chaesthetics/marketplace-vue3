@@ -4,9 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Services\ItemService;
+use App\Http\Requests\ItemRequest;
 
 class ItemController extends Controller
 {
+    protected $service;
+
+    public function __construct(ItemService $service)
+    {
+        $this->service = $service;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -18,16 +26,14 @@ class ItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $payload)
+    public function store(ItemRequest $request)
     {
-        $file = $payload->file;
-        $payload['file_path'] = $file->getPath();
-        $payload['file_name'] = $file->getClientOriginalName();
-        $payload['file_type'] = $file->getClientMimeType();
-        $payload['name'] = $payload['name'] ?? $file->getClientOriginalName();
-        unset($payload['file']);
-
+        $item = $this->service->create($request->validated());
         
+        return response()->json([
+            'message' => 'Item created successfully',
+            'item' => $item,
+        ], Response::HTTP_OK);
     }
 
     /**
