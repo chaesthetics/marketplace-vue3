@@ -18,12 +18,16 @@ class ItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $payload)
     {
-        \Log::info([
-            "title" => $request->title,
-            "file" => $request->file,
-        ]);
+        $file = $payload->file;
+        $payload['file_path'] = $file->getPath();
+        $payload['file_name'] = $file->getClientOriginalName();
+        $payload['file_type'] = $file->getClientMimeType();
+        $payload['name'] = $payload['name'] ?? $file->getClientOriginalName();
+        unset($payload['file']);
+
+        
     }
 
     /**
