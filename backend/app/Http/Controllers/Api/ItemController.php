@@ -28,8 +28,12 @@ class ItemController extends Controller
      */
     public function store(ItemRequest $request)
     {
+        if (! Gate::check('create Post')) {
+            abort(HttpStatusCode::Forbidden->value, 'You do not have permission to post items');
+        }
+
         $item = $this->service->create($request->validated());
-        
+
         return response()->json([
             'message' => 'Item created successfully',
             'item' => $item,
