@@ -32,9 +32,6 @@ class UserResource extends Resource
                         ->label('Email')
                         ->required()
                         ->email(),
-                    Forms\Components\TextInput::make('username')
-                        ->label('Username')
-                        ->required(),
                 ]),
                 Forms\Components\Section::make('Password')->columns(1)->schema([
                     Forms\Components\TextInput::make('password')
@@ -77,21 +74,9 @@ class UserResource extends Resource
             Tables\Columns\TextColumn::make('email')
                 ->sortable()
                 ->searchable(),
-            // Tables\Columns\TextColumn::make('roles')->state(function (User $user) {
-            //     return $user->roles->pluck('name')->join(', ');
-            // }),
-            Tables\Columns\TextColumn::make('email_verified_at')
-                ->sortable()
-                ->dateTime()
-                ->sortable(),
-            Tables\Columns\TextColumn::make('created_at')
-                ->dateTime()
-                ->sortable()
-                ->toggleable(isToggledHiddenByDefault: true),
-            Tables\Columns\TextColumn::make('updated_at')
-                ->dateTime()
-                ->sortable()
-                ->toggleable(isToggledHiddenByDefault: true),
+            Tables\Columns\TextColumn::make('roles')->state(function (User $user) {
+                return $user->roles->pluck('name')->join(', ');
+            }),
         ])
         ->filters([
             //
