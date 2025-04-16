@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response;
 
 class ItemController extends Controller
 {
@@ -20,6 +22,9 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
+        if (! Gate::check('create Post')) {
+            abort(Response::HTTP_FORBIDDEN, 'You do not have permission to create a post.');
+        }
         \Log::info([
             "title" => $request->title,
             "file" => $request->file,
