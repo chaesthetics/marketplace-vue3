@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
+use App\Models\Category;
 
 class Item extends Model
 {
@@ -16,13 +18,16 @@ class Item extends Model
         'price',
         'status',
         'location',
-        'user_id',
+        'created_by',
         'category_id',
+        'file_path',
+        'file_name',
+        'file_type',
     ];
 
-    public function user()
+    public function createdBy()
     {
-        return $this->belongTo(User::class);
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     public function category()

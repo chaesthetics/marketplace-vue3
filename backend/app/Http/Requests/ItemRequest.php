@@ -11,7 +11,7 @@ class ItemRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,9 +26,8 @@ class ItemRequest extends FormRequest
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'price' => 'nullable|numeric|min:0',
-            'status' => 'required|string',
+            'status' => 'nullable|string',
             'location' => 'nullable|string|max:255',
-            'user_id' => 'required|exists:users,id',
             'category_id' => 'nullable|exists:categories,id',
         ];
     }
@@ -46,8 +45,6 @@ class ItemRequest extends FormRequest
             'description.max' => 'The description may not be greater than 1000 characters.',
             'price.numeric' => 'The price must be a number.',
             'price.min' => 'The price must be at least 0.',
-            'status.required' => 'The status is required.',
-            'status.string' => 'The status must be a string.',
             'location.string' => 'The location must be a string.',
             'location.max' => 'The location may not be greater than 255 characters.',
             'category_id.exists' => 'The selected category ID is invalid.',
