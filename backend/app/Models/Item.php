@@ -25,8 +25,8 @@ class Item extends Model
         return $this->belongTo(User::class);
     }
 
-    // public function category()
-    // {
-    //     return $this->belongTo(Category::class);
-    // }
+    public function category()
+    {
+        return $this->belongTo(Category::class);
+    }
 }
