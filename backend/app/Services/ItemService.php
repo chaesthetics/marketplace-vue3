@@ -26,7 +26,7 @@ class ItemService implements BaseServiceInterface
             unset($payload['file']);
 
             $item = new Item($payload);
-            $item->createdBy()->associate(1);
+            $item->createdBy()->associate(auth()->user()->id);
             $item->save();
 
             $this->storeImage($item, $file);
@@ -50,7 +50,7 @@ class ItemService implements BaseServiceInterface
     private function storeImage(Item $item, UploadedFile $file): string
     {
         $fileNameOnly = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $fileName = sprintf('%s-%s.%s', $fileNameOnly, uniqid(), $file->getClientOriginalExtension());
+        $fileName = sprintf('%s.%s', $fileNameOnly, $file->getClientOriginalExtension());
 
         $fileDirectory = sprintf('images/%s',
             $item->id);
