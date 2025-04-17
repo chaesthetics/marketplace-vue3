@@ -22,7 +22,7 @@ class ItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|file|mimes:jpg,jpeg,png,webp',
+            'file' => 'required|file|mimes:jpg,jpeg,png,webp,avif',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'price' => 'nullable|numeric|min:0',
