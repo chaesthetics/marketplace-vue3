@@ -56,7 +56,8 @@ class ItemService implements BaseServiceInterface
             $item->id);
 
         Storage::disk('local')->putFileAs($fileDirectory, $file, $fileName);
-
+        
+        $fileDirectory = str_replace('public/', '', $fileDirectory);
         $item->update([
             'file_path' => $fileDirectory,
             'file_name' => $fileName,
