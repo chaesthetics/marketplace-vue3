@@ -25,6 +25,7 @@ class ItemController extends Controller
         $this->service = $service;
         $this->repository = $repository;
     }
+    
     public function index()
     {
         if (! Gate::check('viewAny Post')) {
