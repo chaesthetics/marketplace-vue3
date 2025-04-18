@@ -1,3 +1,4 @@
+import type { Item } from "~/.types/item";
 import { HTTP_ERROR_STATUS_CODES } from "./constants";
 
 export const handleError = (
@@ -34,3 +35,7 @@ export const isSuccessStatusCode = (statusCode: number) => {
 export const isErrorStatusCode = (statusCode: number) => {
   return HTTP_ERROR_STATUS_CODES.includes(statusCode);
 };
+
+export const getImageUrl = (item: Item): string => {
+  return `http://localhost:8000/storage/${item.file_path}/${item.file_name}`;
+}
