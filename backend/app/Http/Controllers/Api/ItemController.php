@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\ItemRequest;
 use App\Services\ItemService;
+use App\Http\Resources\ItemsResource;
+use App\Repositories\ItemRepository;
 
 class ItemController extends Controller
 {
@@ -16,13 +18,20 @@ class ItemController extends Controller
      */
     protected $service;
 
-    public function __construct(ItemService $service)
+    protected $repository;
+
+    public function __construct(ItemService $service, ItemRepository $repository)
     {
         $this->service = $service;
+        $this->repository = $repository;
     }
     public function index()
     {
-        //
+        if (! Gate::check('viewAny Post')) {
+            abort(HttpStatusCode::Forbidden->value, 'You do not have permission to view Post.');
+        }
+
+        return new ItemsResource($this->repository->fetch());
     }
 
     /**

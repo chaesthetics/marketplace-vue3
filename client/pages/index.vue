@@ -6,6 +6,9 @@ definePageMeta({
   permissions: [{ action: "viewAny", subject: "Post" }],
 });
 
+import useItems from '~/composables/items/useItem';
+const { items } = await useItems();
+
 </script>
 
 <template>
@@ -56,6 +59,6 @@ definePageMeta({
           </div>
         </div>
       </div>
-      <ProductsCard />
+      <ProductsCard :items="items?.data ?? []"/>
     </div>
 </template>

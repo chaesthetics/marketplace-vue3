@@ -52,7 +52,7 @@ class ItemService implements BaseServiceInterface
         $fileNameOnly = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $fileName = sprintf('%s.%s', $fileNameOnly, $file->getClientOriginalExtension());
 
-        $fileDirectory = sprintf('images/%s',
+        $fileDirectory = sprintf('public/images/%s',
             $item->id);
 
         Storage::disk('local')->putFileAs($fileDirectory, $file, $fileName);
