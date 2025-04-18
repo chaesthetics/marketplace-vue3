@@ -17,6 +17,7 @@ export interface Item {
     file_path: string;
     file_name: string;
     file_type: string;
+    image_url: string;
 }
 
 export type ItemsResponse = {

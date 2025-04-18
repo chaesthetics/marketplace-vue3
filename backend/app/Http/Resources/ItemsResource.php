@@ -30,6 +30,7 @@ class ItemsResource extends ResourceCollection
                     'file_path' => $item->file_path,
                     'file_name' => $item->file_name,
                     'file_type' => $item->file_type,
+                    'image_url' => $item->image_url,
                 ];
             })->toArray(),
         ];
