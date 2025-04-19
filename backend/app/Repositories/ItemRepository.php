@@ -19,7 +19,7 @@ class ItemRepository implements BaseRepositoryInterface
 
     public function fetch()
     {
-        $results = request()->results ?? 100;
+        $results = request()->results ?? 20;
         $customAllowedFilters = [];
         $filters = $this->queryFilter($customAllowedFilters);
 
