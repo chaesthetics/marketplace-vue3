@@ -1,10 +1,35 @@
 <script lang="ts" setup>
 import type { Item } from '~/.types/item';
 const config = useRuntimeConfig()
+import type { Filter } from "~/.types/general";
 
 const props = defineProps<{
   items: Item[];
+  filters: Filter;
 }>();
+
+const bottomRef = ref<HTMLElement | null>(null)
+
+onMounted(() => {
+  const observer = new IntersectionObserver(
+    async (entries) => {
+      if (entries[0].isIntersecting) {
+        props.filters.currentPage++;
+      }
+    },
+    {
+      root: document.querySelector('.layout-container'),
+      threshold: 0.5,
+    }
+  );
+
+  if (bottomRef.value) {
+    observer.observe(bottomRef.value);
+  }
+
+  onBeforeUnmount(() => observer.disconnect());
+});
+
 
 </script>
 
@@ -15,5 +40,6 @@ const props = defineProps<{
       <h3 class="text-lg mt-2">{{ item.title }}</h3>
       <p class="text-sm text-gray-500">{{ 'Category' }}</p>
     </div>
+    <div ref="bottomRef" />
   </div>
 </template>

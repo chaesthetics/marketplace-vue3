@@ -7,7 +7,14 @@ definePageMeta({
 });
 
 import useItems from '~/composables/items/useItem';
-const { items } = await useItems();
+const { items, filters, handleRefresh } = await useItems();
+
+watch(
+  () => filters.value.currentPage,
+  async (newPage, oldPage) => {
+      await handleRefresh();
+  }
+);
 
 </script>
 
@@ -59,6 +66,9 @@ const { items } = await useItems();
           </div>
         </div>
       </div>
-      <ProductsCard :items="items?.data ?? []"/>
+      <ProductsCard 
+        :items="items?.data ?? []"
+        :filters="filters"
+      />
     </div>
 </template>

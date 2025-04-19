@@ -7,12 +7,12 @@ import type { Filter } from "~/.types/general";
 
 const useItems = async() => {
     const { getData } = useApi();
-    const items = ref<ItemsResponse>();
+    const items = ref<ItemsResponse>({ data: [] });
     const filters = ref<Filter>({
         currentPage: 1,
-        perPage: 100,
+        perPage: 20,
         filters: [],
-      });
+    });
 
     const urlSearchParams = ref(new URLSearchParams());
 
@@ -21,7 +21,15 @@ const useItems = async() => {
             const response = await getData<ItemsResponse | ErrorResponse>(
                 `/api/items?${urlSearchParams.value.toString()}`,
             );
-            items.value = response as ItemsResponse;
+
+            const newItems = response?.data as Item[];
+            if (filters.value.currentPage > 1 && items.value?.data?.length) {
+                items.value.data = [...items.value.data, ...newItems];
+              } else {
+                if(response?.data){
+                    items.value.data = response.data as Item[];
+                }
+              }
         } catch (error) {
             if (error instanceof ResponseError) {
                 handleError(error.message, error.status);
@@ -44,6 +52,8 @@ const useItems = async() => {
     return {
         items,
         fetcher,
+        filters,
+        handleRefresh
     }
 }
 
