@@ -8,6 +8,8 @@ import type { Filter } from "~/.types/general";
 const useItems = async() => {
     const { getData } = useApi();
     const items = ref<ItemsResponse>({ data: [] });
+    const isLoading = ref(false);
+
     const filters = ref<Filter>({
         currentPage: 1,
         perPage: 20,
@@ -17,6 +19,7 @@ const useItems = async() => {
     const urlSearchParams = ref(new URLSearchParams());
 
     const fetcher = async() => {
+        isLoading.value = true;
         try {
             const response = await getData<ItemsResponse | ErrorResponse>(
                 `/api/items?${urlSearchParams.value.toString()}`,
@@ -37,6 +40,8 @@ const useItems = async() => {
             } else {
                 throw new Error(`Fetch error: ${error}`);
             }
+        } finally {
+            isLoading.value = false;
         }
     }
 
@@ -53,7 +58,8 @@ const useItems = async() => {
         items,
         fetcher,
         filters,
-        handleRefresh
+        handleRefresh,
+        isLoading,
     }
 }
 

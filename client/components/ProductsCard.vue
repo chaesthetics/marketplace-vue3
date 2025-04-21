@@ -29,10 +29,11 @@ onMounted(() => {
 
   onBeforeUnmount(() => observer.disconnect());
 });
+
 </script>
 
 <template>
-  <div class="container mx-auto px-4">
+  <div class="container mx-auto px-4 py-4">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
       <div v-for="item in items" 
            :key="item.id" 
@@ -49,6 +50,6 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <div ref="bottomRef" />
+    <div ref="bottomRef" class="h-1"/>
   </div>
 </template>
