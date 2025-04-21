@@ -7,7 +7,9 @@ definePageMeta({
 });
 
 import useItems from '~/composables/items/useItem';
-const { items, filters, handleRefresh } = await useItems();
+import CardSkeleton from '~/components/skeletons/CardSkeleton.vue';
+const { items, filters, handleRefresh, isLoading } = await useItems();
+const initialLoading = ref(true);
 
 watch(
   () => filters.value.currentPage,
@@ -66,9 +68,11 @@ watch(
           </div>
         </div>
       </div>
-      <ProductsCard 
+      
+      <ProductsCard
         :items="items?.data ?? []"
         :filters="filters"
       />
+      <CardSkeleton v-if="isLoading" />
     </div>
 </template>

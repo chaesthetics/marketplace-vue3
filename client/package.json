@@ -13,7 +13,6 @@
     "@casl/ability": "^6.7.3",
     "@heroicons/vue": "^2.2.0",
     "@nuxt/ui": "^2.21.0",
-    "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
     "@pinia/nuxt": "^0.5.1",
     "autoprefixer": "^10.4.20",
     "axios": "^1.6.8",
